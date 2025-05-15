@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türk Tarihi Öğrenme Kartları</title>
+    <style>
+        :root {
+            --primary: #c0392b;
+            --secondary: #e74c3c;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        
+        .btn-accent:hover {
+            background-color: #e67e22;
+        }
+        
+        .category-selector {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            min-width: 220px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .card-badge {
+            background-color: var(--accent);
+            color: white;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .card-content {
+            margin-bottom: 1rem;
+        }
+        
+        .work-title {
+            font-weight: bold;
+            color: var(--dark);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .work-description {
+            color: #555;
+            margin-top: 0.3rem;
+            font-size: 0.95rem;
+        }
+        
+        .cards-container {
+            margin-top: 2rem;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .sticky-note {
+            background-color: #fef9c3;
+            padding: 1rem;
+            border-radius: 0 0 8px 8px;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: auto;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .quiz-option {
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e5e5e5;
+        }
+        
+        .quiz-option.selected {
+            background-color: #d5f5e3;
+            border-color: var(--success);
+        }
+        
+        .quiz-option.correct {
+            background-color: #d5f5e3;
+            border-color: var(--success);
+        }
+        
+        .quiz-option.incorrect {
+            background-color: #fadbd8;
+            border-color: var(--secondary);
+        }
+        
+        .quiz-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .quiz-progress {
+            background-color: #eee;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+        
+        .quiz-progress-bar {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .quiz-score {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            height: 200px;
+            margin-bottom: 2rem;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .flashcard-front {
+            background-color: white;
+        }
+        
+        .flashcard-back {
+            background-color: var(--primary);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            text-align: center;
+        }
+        
+        .flashcard-subtitle {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+        }
+        
+        .flashcard-question {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .flashcard-info {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+        }
+        
+        .tab-container {
+            margin-bottom: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .group-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AA Alma Garantili Ders Çalışma</h1>
+    </header>
+    
+    <div class="container">
+        <div class="tab-container">
+            <div class="tabs">
+                <div class="tab active" data-tab="categories">Kategoriler</div>
+                <div class="tab" data-tab="flashcards">Hafıza Kartları</div>
+                <div class="tab" data-tab="quiz">Quiz</div>
+            </div>
+            
+            <div class="tab-content active" id="categories-content">
+                <div class="controls">
+                    <div>
+                        <button class="btn" id="expand-all">Tümünü Genişlet</button>
+                        <button class="btn" id="collapse-all">Tümünü Daralt</button>
+                    </div>
+                    <select class="category-selector" id="jump-to-category">
+                        <option value="">Kategoriye Atla</option>
+                        <option value="category-1">Modern Batılı Araştırmacılar</option>
+                        <option value="category-2">Türk ve Sovyet Araştırmacılar</option>
+                        <option value="category-3">Barthold'un Eserleri</option>
+                        <option value="category-4">Çin Kaynaklarından Çeviriler</option>
+                        <option value="category-5">Orta Çağ Türk Edebiyatı</option>
+                        <option value="category-6">Ortaçağ Tarih Kronikleri</option>
+                        <option value="category-7">Babürlü ve Timurlu Eserleri</option>
+                        <option value="category-8">Seyahatnameler</option>
+                    </select>
+                </div>
+                
+                <div class="cards-container">
+                    <!-- 1. Modern Batılı Araştırmacıların Eserleri -->
+                    <h2 class="group-title" id="category-1">1. Modern Batılı Araştırmacıların Eserleri</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">René Grousset</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Bozkır İmparatorluğu</div>
+                                <div class="work-description">Türk-Moğol İmparatorluklarının tarihini kapsamlı bir şekilde ele alan önemli bir eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Fransız tarihçi, Avrasya göçebe kültürlerini inceledi</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Jean-Paul Roux</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Türklerin Tarihi</div>
+                                <div class="work-description">Türk tarihini geniş bir zaman diliminde inceleyerek kültürel ve siyasi gelişimlerini anlatan kapsamlı bir çalışma.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Fransız tarihçi ve dinler tarihçisi</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Denis Sinor</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Erken İç Asya Tarihi</div>
+                                <div class="work-description">İç Asya'nın erken dönemlerini anlatan önemli bir kolektif çalışma. Sinor bu kitabın derleyicisidir.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Macar asıllı İç Asya ve Altay dilleri uzmanı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Peter Golden</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Türk Halkları Tarihine Giriş</div>
+                                <div class="work-description">Türk halklarının tarihine genel bir bakış sunan ve temel bilgileri içeren önemli bir kaynak.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Amerikalı tarihçi, Türk ve Avrasya tarihi uzmanı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Vasili Radlof</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Erste Lieferung</div>
+                                <div class="work-description">Türk lehçelerinin karşılaştırmalı grameri ve sözlük çalışması olan bu eser, Türkoloji açısından önemlidir.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Alman kökenli Rus Türkolog ve etnograf</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Arminus Vambery</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Bir Sahte Dervişin Asya-yı Vusta'ya Seyahati</div>
+                                <div class="work-description">Orta Asya'ya derviş kılığında yaptığı seyahatlerini anlatan önemli bir seyahatname.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Macar Türkolog, Orta Asya'yı derviş kılığında gezen araştırmacı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Anthony Jenkinson</div>
+                                <div class="card-badge">Batılı</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Seyahatnamesi</div>
+                                <div class="work-description">16. yüzyılda Osmanlı İmparatorluğu, İran ve Orta Asya bölgelerine yaptığı seyahatleri anlatan eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: İngiliz kâşif ve tüccar, 16. yüzyılda yaşadı</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 2. Türk ve Sovyet Araştırmacıların Modern Eserleri -->
+                    <h2 class="group-title" id="category-2">2. Türk ve Sovyet Araştırmacıların Modern Eserleri</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Akdes Nimet Kurat</div>
+                                <div class="card-badge">Türk</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">IV-XVIII. Yüzyıllarda Karadeniz Kuzeyinde Türk Kavimleri ve Devletleri</div>
+                                <div class="work-description">Karadeniz'in kuzeyindeki Türk kavimlerinin tarihini anlatan önemli bir akademik çalışma.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Önemli Türk tarihçi, Rusya ve Avrasya tarihi uzmanı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Akdes Nimet Kurat</div>
+                                <div class="card-badge">Türk</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Topkapı Sarayı Müzesi Arşivindeki Altın Ordu, Kırım ve Türkistan Hanlıklarına Ait Yarlıklar ve Bitikler</div>
+                                <div class="work-description">Topkapı Sarayı arşivindeki önemli Türk-Moğol belgeleri üzerine bir inceleme.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Arşiv belgeleri üzerine önemli çalışmalar yaptı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">A. Zeki Velidi Togan</div>
+                                <div class="card-badge">Türk</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Umumi Türk Tarihine Giriş</div>
+                                <div class="work-description">Genel Türk tarihini ele alan temel bir giriş kitabı niteliğindedir.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Başkurt kökenli tarihçi, Türkistan milli hareketi lideri</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Necib Asım</div>
+                                <div class="card-badge">Türk</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Orhun Abideleri</div>
+                                <div class="work-description">Göktürk yazıtları üzerine yapılan önemli çalışmalardan biridir.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Osmanlı-Türk dil bilimci ve tarihçi</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Özkan İzgi</div>
+                                <div class="card-badge">Türk</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Çin Elçisi Wang Yen-te'nin Uygur Seyahatnamesi</div>
+                                <div class="work-description">10. yüzyılda Çin elçisinin Uygur bölgesine yaptığı seyahati anlatan metnin çevirisi ve incelemesi.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Türk tarihçi, Uygur tarihi üzerine çalışmalar yaptı</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Diğer kategoriler için benzer yapıyı tekrarlayın -->
+                    
+                    <!-- 3. Barthold'un Eserleri -->
+                    <h2 class="group-title" id="category-3">3. Barthold'un Eserleri</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Moğol İstilasına Kadar Türkistan</div>
+                                <div class="work-description">Moğol istilası öncesi Türkistan bölgesinin siyasi, ekonomik ve kültürel tarihini inceleyen başyapıt.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Rus oryantalist, Orta Asya tarihi uzmanı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Ali Şir Nevai ve Uluğ Bek monografileri</div>
+                                <div class="work-description">Timurlu dönemi önemli şahsiyetleri üzerine biyografik çalışmalar.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Orta Asya Türk Tarihi Hakkında Dersler</div>
+                                <div class="work-description">Barthold'un Türk tarihi üzerine verdiği derslerin derlenmesiyle oluşan eser.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">İslam Medeniyeti Tarihi</div>
+                                <div class="work-description">İslam medeniyetinin gelişimini tarihsel perspektiften inceleyen kapsamlı bir çalışma.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Rusya ve Avrupa'da Oryantalizm</div>
+                                <div class="work-description">Doğu araştırmalarının Avrupa ve Rusya'daki gelişimini anlatan eser.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Semireçye Tarihi</div>
+                                <div class="work-description">Yedisu bölgesinin tarihini inceleyen önemli bir monografi.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Türkmen Halkının Tarihi</div>
+                                <div class="work-description">Türkmen halklarının tarihsel gelişimine odaklanan çalışma.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">V.V. Barthold</div>
+                                <div class="card-badge">Sovyet</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Türkistan'ın Kültür Hayatının Tarihi</div>
+                                <div class="work-description">Türkistan'ın kültürel gelişimini tarihsel süreç içinde inceleyen kapsamlı çalışma.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4. Çin Kaynaklarından Çeviriler -->
+                    <h2 class="group-title" id="category-4">4. Çin Kaynaklarından Çeviriler</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ayşe Onat, Sema Orsoy, Konuralp Ercilasun</div>
+                                <div class="card-badge">Çeviri</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Çin Kaynaklarında Türkler: Han Hanedanlığı Tarihi</div>
+                                <div class="work-description">Çin kaynaklarından Han Hanedanlığı döneminde Türklerle ilgili bölümlerin çevirisi.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ayşe Onat</div>
+                                <div class="card-badge">Çeviri</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Çin Kaynaklarında Türkler: Han Hanedanı Tarihinde "Batı Bölgeleri"</div>
+                                <div class="work-description">Han Hanedanı tarihlerinde geçen "Batı Bölgeleri" ile ilgili metinlerin çevirisi.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">İsenbike Togan, Gülnar Kara, Cahide Baysal</div>
+                                <div class="card-badge">Çeviri</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Çin Kaynakları'nda Türkler: Eski T'ang Tarihi</div>
+                                <div class="work-description">T'ang hanedanlığı dönemine ait Çin kaynaklarında Türklerle ilgili bölümlerin çevirisi.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 5. Orta Çağ Dönemi Türk Edebiyatı ve Düşüncesi -->
+                    <h2 class="group-title" id="category-5">5. Orta Çağ Dönemi Türk Edebiyatı ve Düşüncesi</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Yusuf Has Hacib</div>
+                                <div class="card-badge">Edebiyat</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Kutadgu Bilig (Mutluluk Bilgisi)</div>
+                                <div class="work-description">Türk-İslam edebiyatının ilk büyük eseri, siyasetname türünde yazılmış bir mesnevidir.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 11. yüzyılda Karahanlı döneminde yazıldı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Kaşgarlı Mahmud</div>
+                                <div class="card-badge">Edebiyat</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Divânu Lügati't-Türk (Büyük Türk Sözlüğü)</div>
+                                <div class="work-description">Türkçeden Arapçaya sözlük ve Türk kültürü ansiklopedisi niteliğinde kapsamlı bir eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 11. yüzyılda yazılan ilk Türkçe sözlük</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ahmet Yesevi</div>
+                                <div class="card-badge">Edebiyat</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Divan-ı Hikmet</div>
+                                <div class="work-description">Tasavvufi düşünceleri Türkçe şiirlerle anlatan, halk edebiyatına yön veren önemli bir eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Türk tasavvuf geleneğinin kurucusu</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Edip Ahmet Yükneki</div>
+                                <div class="card-badge">Edebiyat</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Atabet'ül Hakayık (Hakikatlerin Eşiği)</div>
+                                <div class="work-description">İslami ahlak ve adabı öğreten didaktik bir Türkçe eserdir.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 12. yüzyılda Karahanlı döneminde yazıldı</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 6. Ortaçağ Dönemi Tarih Kronikleri -->
+                    <h2 class="group-title" id="category-6">6. Ortaçağ Dönemi Tarih Kronikleri</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ata Melik Cüveyni</div>
+                                <div class="card-badge">Kronik</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Tarih-i Cihangüşâ</div>
+                                <div class="work-description">Moğol İmparatorluğu'nun yükselişini anlatan önemli bir tarihsel kaynak.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 13. yüzyılda İlhanlı devlet adamı ve tarihçi</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Reşidü'd-din Fazlullâh</div>
+                                <div class="card-badge">Kronik</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Câmi'u't-tevârîh</div>
+                                <div class="work-description">İlhanlı döneminde yazılmış kapsamlı bir dünya tarihi.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: İlhanlı veziri ve tarihçi, 14. yüzyıl başları</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ötemiş Hacı</div>
+                                <div class="card-badge">Kronik</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Tarih-i Dost Sultan</div>
+                                <div class="work-description">Altın Orda ve Deşt-i Kıpçak tarihi hakkında önemli bilgiler içeren eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 16. yüzyılda Harezm'de yaşamış tarihçi</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">İmam-ı Ebü'l-Fütuh Abdülgafur</div>
+                                <div class="card-badge">Kronik</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Tarih-i Kaşgar</div>
+                                <div class="work-description">Kaşgar bölgesinin tarihini anlatan önemli bir yerel tarih eseri.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Muhammed Salih</div>
+                                <div class="card-badge">Kronik</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Şeybani-name</div>
+                                <div class="work-description">Özbek hanı Şeybani Han'ın seferlerini anlatan manzum tarih.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 16. yüzyıl başlarında Çağatay Türkçesiyle yazıldı</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ebulgazi Bahadır Han</div>
+                                <div class="card-badge">Kronik</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Şecere-i Türk</div>
+                                <div class="work-description">Türklerin soy kütüğü olarak yazılmış önemli bir tarih kitabı.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Hive Hanı ve tarihçi, 17. yüzyıl</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 7. Babürlü ve Timurlu Dönemi Eserleri -->
+                    <h2 class="group-title" id="category-7">7. Babürlü ve Timurlu Dönemi Eserleri</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Gülbeden Begüm</div>
+                                <div class="card-badge">Babürlü</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Hümayunnâme</div>
+                                <div class="work-description">Babür İmparatorluğu'nun kuruluş dönemini ve Hümayun'un saltanatını anlatan hatırat.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Babür'ün kızı ve ilk kadın tarihçilerden biri</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Cihangir</div>
+                                <div class="card-badge">Babürlü</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Tüzük-i Jihangir</div>
+                                <div class="work-description">Babürlü hükümdarı Cihangir'in saltanatını anlatan otobiyografik eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Babürlü hükümdarı, Ekber'in oğlu</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Zahirüddin Muhammed Babür</div>
+                                <div class="card-badge">Babürlü</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Vekâyi veya Bâbürnâme</div>
+                                <div class="work-description">Babür'ün hayatını ve fetihlerini anlatan otobiyografik eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Timur'un torunu, Babür İmparatorluğu'nun kurucusu</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Hasan Rumlu</div>
+                                <div class="card-badge">Timurlu</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Ahsenü`t Tevarih</div>
+                                <div class="work-description">Safevi ve komşu ülkelerin tarihini kapsayan 16. yüzyıl kroniği.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Safevi döneminde yaşamış Türkmen tarihçi</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 8. Seyahatnameler -->
+                    <h2 class="group-title" id="category-8">8. Seyahatnameler</h2>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Wilhelm von Rubruck</div>
+                                <div class="card-badge">Seyahatname</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Moğolların Büyük Hanına Seyahat</div>
+                                <div class="work-description">13. yüzyılda Moğol İmparatorluğu'na yapılan seyahati anlatan önemli bir kaynak.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Flaman Fransisken keşiş, 1253-1255 yılları arasında seyahat etti</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Marco Polo</div>
+                                <div class="card-badge">Seyahatname</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Doğu ve Batı Kaynaklarında Çin Seyahati</div>
+                                <div class="work-description">Marco Polo'nun Asya seyahatlerini anlatan meşhur seyahatname.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Venedikli tüccar ve kaşif, 13. yüzyıl</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">İbn Battuta</div>
+                                <div class="card-badge">Seyahatname</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">İbn Battuta Seyahatnamesi</div>
+                                <div class="work-description">Ortaçağ İslam dünyası ve Asya'ya yapılan seyahatleri anlatan kapsamlı eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Faslı seyyah, dünyanın bilinen en büyük gezgini</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Tamim İbn Bahr</div>
+                                <div class="card-badge">Seyahatname</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Seyahatnamesi</div>
+                                <div class="work-description">Erken dönem İslam coğrafyacısının Orta Asya seyahatlerini anlatan eser.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: 9. yüzyılda Uygur başkentini ziyaret eden Arap seyyah</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ruy Gonzales de Claviyo</div>
+                                <div class="card-badge">Seyahatname</div>
+                            </div>
+                            <div class="card-content">
+                                <div class="work-title">Anadolu, Orta Asya ve Timur</div>
+                                <div class="work-description">İspanyol elçinin Timur'un sarayına yaptığı seyahati anlatan güncesi.</div>
+                            </div>
+                            <div class="sticky-note">İpucu: Kastilya elçisi, 1403-1406 yıllarında seyahat etti</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="flashcards-content">
+                <div class="controls">
+                    <button class="btn" id="prev-card">Önceki</button>
+                    <select class="category-selector" id="flashcard-category">
+                        <option value="all">Tüm Kategoriler</option>
+                        <option value="0">Modern Batılı Araştırmacılar</option>
+                        <option value="1">Türk ve Sovyet Araştırmacılar</option>
+                        <option value="2">Barthold'un Eserleri</option>
+                        <option value="3">Çin Kaynaklarından Çeviriler</option>
+                        <option value="4">Orta Çağ Türk Edebiyatı</option>
+                        <option value="5">Ortaçağ Tarih Kronikleri</option>
+                        <option value="6">Babürlü ve Timurlu Eserleri</option>
+                        <option value="7">Seyahatnameler</option>
+                    </select>
+                    <button class="btn" id="next-card">Sonraki</button>
+                </div>
+                
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-subtitle">Yazarı Bulun:</div>
+                            <div class="flashcard-question" id="flashcard-question"></div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-title" id="flashcard-answer"></div>
+                            <div class="flashcard-info" id="flashcard-info"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="quiz-footer">
+                    <div>Kart <span id="card-index">1</span>/<span id="card-total">42</span></div>
+                    <div>
+                        <button class="btn btn-accent" id="toggle-mode">Mod: Yazar → Eser</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="quiz-content">
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+                </div>
+                
+                <div class="quiz-container">
+                    <div class="quiz-question" id="quiz-question"></div>
+                    <div class="quiz-options" id="quiz-options"></div>
+                    <div class="quiz-footer">
+                        <div class="quiz-score">Skor: <span id="quiz-score">0</span>/<span id="quiz-total">0</span></div>
+                        <button class="btn" id="next-question" disabled>Sonraki Soru</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Uğur sayesinde ders çalışmak daha eğlenceli</p>
+    </footer>
+    
+    <script>
+        // Tüm kitap ve yazar verilerini tanımlama
+        const booksData = [
+            // 1. Modern Batılı Araştırmacıların Eserleri
+            { 
+                group: 0,
+                groupName: "Modern Batılı Araştırmacılar",
+                pairs: [
+                    { author: "René Grousset", book: "Bozkır İmparatorluğu", info: "Fransız tarihçi, Avrasya göçebe kültürlerini inceledi" },
+                    { author: "Jean-Paul Roux", book: "Türklerin Tarihi", info: "Fransız tarihçi ve dinler tarihçisi" },
+                    { author: "Denis Sinor", book: "Erken İç Asya Tarihi", info: "Macar asıllı İç Asya ve Altay dilleri uzmanı" },
+                    { author: "Peter Golden", book: "Türk Halkları Tarihine Giriş", info: "Amerikalı tarihçi, Türk ve Avrasya tarihi uzmanı" },
+                    { author: "Vasili Radlof", book: "Erste Lieferung", info: "Alman kökenli Rus Türkolog ve etnograf" },
+                    { author: "Arminus Vambery", book: "Bir Sahte Dervişin Asya-yı Vusta'ya Seyahati", info: "Macar Türkolog, Orta Asya'yı derviş kılığında gezen araştırmacı" },
+                    { author: "Anthony Jenkinson", book: "Seyahatnamesi", info: "İngiliz kâşif ve tüccar, 16. yüzyılda yaşadı" }
+                ]
+            },
+            // 2. Türk ve Sovyet Araştırmacıların Modern Eserleri
+            {
+                group: 1,
+                groupName: "Türk ve Sovyet Araştırmacılar",
+                pairs: [
+                    { author: "Akdes Nimet Kurat", book: "IV-XVIII. Yüzyıllarda Karadeniz Kuzeyinde Türk Kavimleri ve Devletleri", info: "Önemli Türk tarihçi, Rusya ve Avrasya tarihi uzmanı" },
+                    { author: "Akdes Nimet Kurat", book: "Topkapı Sarayı Müzesi Arşivindeki Altın Ordu, Kırım ve Türkistan Hanlıklarına Ait Yarlıklar ve Bitikler", info: "Arşiv belgeleri üzerine önemli çalışmalar yaptı" },
+                    { author: "A. Zeki Velidi Togan", book: "Umumi Türk Tarihine Giriş", info: "Başkurt kökenli tarihçi, Türkistan milli hareketi lideri" },
+                    { author: "Necib Asım", book: "Orhun Abideleri", info: "Osmanlı-Türk dil bilimci ve tarihçi" },
+                    { author: "Özkan İzgi", book: "Çin Elçisi Wang Yen-te'nin Uygur Seyahatnamesi", info: "Türk tarihçi, Uygur tarihi üzerine çalışmalar yaptı" }
+                ]
+            },
+            // 3. Barthold'un Eserleri
+            {
+                group: 2,
+                groupName: "Barthold'un Eserleri",
+                pairs: [
+                    { author: "V.V. Barthold", book: "Moğol İstilasına Kadar Türkistan", info: "Rus oryantalist, Orta Asya tarihi uzmanı" },
+                    { author: "V.V. Barthold", book: "Ali Şir Nevai ve Uluğ Bek monografileri", info: "Timurlu dönemi şahsiyetleri üzerine çalışmalar" },
+                    { author: "V.V. Barthold", book: "Orta Asya Türk Tarihi Hakkında Dersler", info: "Rus oryantalist, Orta Asya tarihi uzmanı" },
+                    { author: "V.V. Barthold", book: "İslam Medeniyeti Tarihi", info: "Rus oryantalist, İslam tarihi uzmanı" },
+                    { author: "V.V. Barthold", book: "Rusya ve Avrupa'da Oryantalizm", info: "Rus oryantalist, doğu araştırmaları uzmanı" },
+                    { author: "V.V. Barthold", book: "Semireçye Tarihi", info: "Rus oryantalist, Yedisu bölgesi uzmanı" },
+                    { author: "V.V. Barthold", book: "Türkmen Halkının Tarihi", info: "Rus oryantalist, Türkmen tarihi uzmanı" },
+                    { author: "V.V. Barthold", book: "Türkistan'ın Kültür Hayatının Tarihi", info: "Rus oryantalist, Türkistan kültür tarihi uzmanı" }
+                ]
+            },
+            // 4. Çin Kaynaklarından Çeviriler
+            {
+                group: 3,
+                groupName: "Çin Kaynaklarından Çeviriler",
+                pairs: [
+                    { author: "Ayşe Onat, Sema Orsoy ve Konuralp Ercilasun", book: "Çin Kaynaklarında Türkler: Han Hanedanlığı Tarihi", info: "Türk araştırmacılar, Çin kaynaklarını Türkçeye kazandırdılar" },
+                    { author: "Ayşe Onat", book: "Çin Kaynaklarında Türkler: Han Hanedanı Tarihinde 'Batı Bölgeleri'", info: "Türk araştırmacı, Çin kaynaklarını Türkçeye kazandırdı" },
+                    { author: "İsenbike Togan, Gülnar Kara ve Cahide Baysal", book: "Çin Kaynakları'nda Türkler: Eski T'ang Tarihi", info: "Türk araştırmacılar, T'ang dönemi Çin kaynaklarını çevirdiler" }
+                ]
+            },
+            // 5. Orta Çağ Dönemi Türk Edebiyatı ve Düşüncesi
+            {
+                group: 4,
+                groupName: "Orta Çağ Türk Edebiyatı",
+                pairs: [
+                    { author: "Yusuf Has Hacib", book: "Kutadgu Bilig", info: "11. yüzyılda Karahanlı döneminde yazıldı" },
+                    { author: "Kaşgarlı Mahmud", book: "Divânu Lügati't-Türk", info: "11. yüzyılda yazılan ilk Türkçe sözlük" },
+                    { author: "Ahmet Yesevi", book: "Divan-ı Hikmet", info: "Türk tasavvuf geleneğinin kurucusu" },
+                    { author: "Edip Ahmet Yükneki", book: "Atabet'ül Hakayık", info: "12. yüzyılda Karahanlı döneminde yazıldı" }
+                ]
+            },
+            // 6. Ortaçağ Dönemi Tarih Kronikleri
+            {
+                group: 5,
+                groupName: "Ortaçağ Tarih Kronikleri",
+                pairs: [
+                    { author: "Ata Melik Cüveyni", book: "Tarih-i Cihangüşâ", info: "13. yüzyılda İlhanlı devlet adamı ve tarihçi" },
+                    { author: "Reşidü'd-din Fazlullâh", book: "Câmi'u't-tevârîh", info: "İlhanlı veziri ve tarihçi, 14. yüzyıl başları" },
+                    { author: "Ötemiş Hacı", book: "Tarih-i Dost Sultan", info: "16. yüzyılda Harezm'de yaşamış tarihçi" },
+                    { author: "İmam-ı Ebü'l-Fütuh Abdülgafur", book: "Tarih-i Kaşgar", info: "Kaşgar bölgesi tarihçisi" },
+                    { author: "Muhammed Salih", book: "Şeybani-name", info: "16. yüzyıl başlarında Çağatay Türkçesiyle yazıldı" },
+                    { author: "Ebulgazi Bahadır Han", book: "Şecere-i Türk", info: "Hive Hanı ve tarihçi, 17. yüzyıl" }
+                ]
+            },
+            // 7. Babürlü ve Timurlu Dönemi Eserleri
+            {
+                group: 6,
+                groupName: "Babürlü ve Timurlu Eserleri",
+                pairs: [
+                    { author: "Gülbeden Begüm", book: "Hümayunnâme", info: "Babür'ün kızı ve ilk kadın tarihçilerden biri" },
+                    { author: "Cihangir", book: "Tüzük-i Jihangir", info: "Babürlü hükümdarı, Ekber'in oğlu" },
+                    { author: "Zahirüddin Muhammed Babür", book: "Vekâyi veya Bâbürnâme", info: "Timur'un torunu, Babür İmparatorluğu'nun kurucusu" },
+                    { author: "Hasan Rumlu", book: "Ahsenü`t Tevarih", info: "Safevi döneminde yaşamış Türkmen tarihçi" }
+                ]
+            },
+            // 8. Seyahatnameler
+            {
+                group: 7,
+                groupName: "Seyahatnameler",
+                pairs: [
+                    { author: "Wilhelm von Rubruck", book: "Moğolların Büyük Hanına Seyahat", info: "Flaman Fransisken keşiş, 1253-1255 yılları arasında seyahat etti" },
+                    { author: "Marco Polo", book: "Doğu ve Batı Kaynaklarında Çin Seyahati", info: "Venedikli tüccar ve kaşif, 13. yüzyıl" },
+                    { author: "İbn Battuta", book: "İbn Battuta Seyahatnamesi", info: "Faslı seyyah, dünyanın bilinen en büyük gezgini" },
+                    { author: "Tamim İbn Bahr", book: "Seyahatnamesi", info: "9. yüzyılda Uygur başkentini ziyaret eden Arap seyyah" },
+                    { author: "Ruy Gonzales de Claviyo", book: "Anadolu, Orta Asya ve Timur", info: "Kastilya elçisi, 1403-1406 yıllarında seyahat etti" }
+                ]
+            }
+        ];
+
+        // JavaScript kodunu burada yazın
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab işlemleri
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Aktif tab'ı değiştir
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // İlgili içeriği göster
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId + '-content') {
+                            content.classList.add('active');
+                        }
+                    });
+                    
+                    // Tab değiştiğinde ilgili başlatma işlevlerini çağır
+                    if (tabId === 'flashcards') {
+                        initFlashcards();
+                    } else if (tabId === 'quiz') {
+                        initQuiz();
+                    }
+                });
+            });
+            
+            // Kategori atla seçeneği
+            const jumpToCategory = document.getElementById('jump-to-category');
+            jumpToCategory.addEventListener('change', function() {
+                if (this.value) {
+                    const targetElement = document.getElementById(this.value);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+            
+            // Tümünü genişlet/daralt butonları
+            const expandAllBtn = document.getElementById('expand-all');
+            const collapseAllBtn = document.getElementById('collapse-all');
+            
+            expandAllBtn.addEventListener('click', function() {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.style.maxHeight = 'none';
+                    card.classList.add('expanded');
+                });
+            });
+            
+            collapseAllBtn.addEventListener('click', function() {
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.style.maxHeight = '100px';
+                    card.classList.remove('expanded');
+                });
+            });
+            
+            // HAFIZA KARTLARI FONKSİYONLARI
+            let currentCardIndex = 0;
+            let filteredCards = [];
+            let cardMode = 'authorToBook'; // Varsayılan mod: yazardan kitaba
+            
+            function initFlashcards() {
+                filteredCards = getAllCards();
+                updateFlashcardCounter();
+                showCurrentCard();
+                
+                // Event listeners
+                document.getElementById('prev-card').addEventListener('click', prevCard);
+                document.getElementById('next-card').addEventListener('click', nextCard);
+                document.getElementById('flashcard').addEventListener('click', flipCard);
+                document.getElementById('toggle-mode').addEventListener('click', toggleCardMode);
+                document.getElementById('flashcard-category').addEventListener('change', filterCardsByCategory);
+            }
+            
+            function getAllCards() {
+                let allCards = [];
+                booksData.forEach(group => {
+                    group.pairs.forEach(pair => {
+                        allCards.push({
+                            author: pair.author,
+                            book: pair.book,
+                            info: pair.info,
+                            group: group.group
+                        });
+                    });
+                });
+                return allCards;
+            }
+            
+            function filterCardsByCategory() {
+                const categoryValue = document.getElementById('flashcard-category').value;
+                
+                if (categoryValue === 'all') {
+                    filteredCards = getAllCards();
+                } else {
+                    const groupIndex = parseInt(categoryValue);
+                    filteredCards = getAllCards().filter(card => card.group === groupIndex);
+                }
+                
+                currentCardIndex = 0;
+                updateFlashcardCounter();
+                showCurrentCard();
+            }
+            
+            function showCurrentCard() {
+                if (filteredCards.length === 0) return;
+                
+                const card = filteredCards[currentCardIndex];
+                const questionElement = document.getElementById('flashcard-question');
+                const answerElement = document.getElementById('flashcard-answer');
+                const infoElement = document.getElementById('flashcard-info');
+                const flashcardSubtitle = document.querySelector('.flashcard-subtitle');
+                
+                // Flashcard içeriğini kart moduna göre ayarla
+                if (cardMode === 'authorToBook') {
+                    flashcardSubtitle.textContent = 'Yazarı Bulun:';
+                    questionElement.textContent = card.book;
+                    answerElement.textContent = card.author;
+                } else {
+                    flashcardSubtitle.textContent = 'Eseri Bulun:';
+                    questionElement.textContent = card.author;
+                    answerElement.textContent = card.book;
+                }
+                
+                infoElement.textContent = card.info || '';
+                
+                // Kart çevrilmiş olabilir, sıfırla
+                document.getElementById('flashcard').classList.remove('flipped');
+            }
+            
+            function updateFlashcardCounter() {
+                document.getElementById('card-index').textContent = currentCardIndex + 1;
+                document.getElementById('card-total').textContent = filteredCards.length;
+            }
+            
+            function prevCard() {
+                if (filteredCards.length === 0) return;
+                
+                currentCardIndex = (currentCardIndex - 1 + filteredCards.length) % filteredCards.length;
+                showCurrentCard();
+                updateFlashcardCounter();
+            }
+            
+            function nextCard() {
+                if (filteredCards.length === 0) return;
+                
+                currentCardIndex = (currentCardIndex + 1) % filteredCards.length;
+                showCurrentCard();
+                updateFlashcardCounter();
+            }
+            
+            function flipCard() {
+                document.getElementById('flashcard').classList.toggle('flipped');
+            }
+            
+            function toggleCardMode() {
+                const toggleBtn = document.getElementById('toggle-mode');
+                
+                if (cardMode === 'authorToBook') {
+                    cardMode = 'bookToAuthor';
+                    toggleBtn.textContent = 'Mod: Eser → Yazar';
+                } else {
+                    cardMode = 'authorToBook';
+                    toggleBtn.textContent = 'Mod: Yazar → Eser';
+                }
+                
+                showCurrentCard();
+            }
+            
+            // QUIZ FONKSİYONLARI
+            let currentQuizIndex = 0;
+            let quizQuestions = [];
+            let userScore = 0;
+            let selectedOption = null;
+            
+            function initQuiz() {
+                generateQuizQuestions();
+                resetQuiz();
+                showCurrentQuestion();
+                
+                // Event listeners
+                document.getElementById('next-question').addEventListener('click', nextQuestion);
+            }
+            
+            function generateQuizQuestions() {
+                quizQuestions = [];
+                const allCards = getAllCards();
+                
+                // 10 soru oluştur
+                for (let i = 0; i < 10; i++) {
+                    // Rastgele bir kart seç
+                    const randomIndex = Math.floor(Math.random() * allCards.length);
+                    const randomCard = allCards[randomIndex];
+                    
+                    // Rastgele soru tipi (yazar-kitap veya kitap-yazar)
+                    const questionType = Math.random() > 0.5 ? 'authorToBook' : 'bookToAuthor';
+                    
+                    // Seçenekler için 3 yanlış cevap ekle
+                    let options = [];
+                    if (questionType === 'authorToBook') {
+                        options.push({ text: randomCard.book, correct: true });
+                        
+                        // 3 yanlış kitap ismi ekle
+                        let wrongOptions = 0;
+                        while (wrongOptions < 3) {
+                            const wrongIndex = Math.floor(Math.random() * allCards.length);
+                            if (wrongIndex !== randomIndex && !options.some(opt => opt.text === allCards[wrongIndex].book)) {
+                                options.push({ text: allCards[wrongIndex].book, correct: false });
+                                wrongOptions++;
+                            }
+                        }
+                    } else {
+                        options.push({ text: randomCard.author, correct: true });
+                        
+                        // 3 yanlış yazar ismi ekle
+                        let wrongOptions = 0;
+                        while (wrongOptions < 3) {
+                            const wrongIndex = Math.floor(Math.random() * allCards.length);
+                            if (wrongIndex !== randomIndex && !options.some(opt => opt.text === allCards[wrongIndex].author)) {
+                                options.push({ text: allCards[wrongIndex].author, correct: false });
+                                wrongOptions++;
+                            }
+                        }
+                    }
+                    
+                    // Seçenekleri karıştır
+                    options = shuffleArray(options);
+                    
+                    // Soru ekle
+                    quizQuestions.push({
+                        questionType: questionType,
+                        question: questionType === 'authorToBook' 
+                            ? `"${randomCard.author}" adlı yazarın eseri hangisidir?` 
+                            : `"${randomCard.book}" adlı eserin yazarı kimdir?`,
+                        options: options,
+                        card: randomCard
+                    });
+                }
+            }
+            
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            function resetQuiz() {
+                currentQuizIndex = 0;
+                userScore = 0;
+                updateQuizScore();
+                updateQuizProgressBar();
+            }
+            
+            function showCurrentQuestion() {
+                if (quizQuestions.length === 0) return;
+                
+                const currentQuestion = quizQuestions[currentQuizIndex];
+                document.getElementById('quiz-question').textContent = currentQuestion.question;
+                
+                const optionsContainer = document.getElementById('quiz-options');
+                optionsContainer.innerHTML = '';
+                
+                currentQuestion.options.forEach((option, index) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'quiz-option';
+                    optionElement.textContent = option.text;
+                    optionElement.dataset.index = index;
+                    optionElement.addEventListener('click', selectOption);
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                // Sonraki soru butonunu devre dışı bırak
+                document.getElementById('next-question').disabled = true;
+                selectedOption = null;
+            }
+            
+            function selectOption(e) {
+                if (selectedOption !== null) return; // Zaten seçim yapılmışsa
+                
+                selectedOption = parseInt(e.target.dataset.index);
+                const currentQuestion = quizQuestions[currentQuizIndex];
+                const options = document.querySelectorAll('.quiz-option');
+                
+                // Seçilen seçeneği işaretle
+                options[selectedOption].classList.add('selected');
+                
+                // Doğru cevabı göster
+                options.forEach((option, index) => {
+                    if (currentQuestion.options[index].correct) {
+                        option.classList.add('correct');
+                    } else if (index === selectedOption && !currentQuestion.options[index].correct) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                // Skoru güncelle
+                if (currentQuestion.options[selectedOption].correct) {
+                    userScore++;
+                    updateQuizScore();
+                }
+                
+                // Sonraki soru butonunu etkinleştir
+                document.getElementById('next-question').disabled = false;
+            }
+            
+            function nextQuestion() {
+                currentQuizIndex++;
+                
+                if (currentQuizIndex < quizQuestions.length) {
+                    showCurrentQuestion();
+                    updateQuizProgressBar();
+                } else {
+                    // Quiz tamamlandı
+                    showQuizResults();
+                }
+            }
+            
+            function showQuizResults() {
+                const quizContainer = document.querySelector('.quiz-container');
+                quizContainer.innerHTML = `
+                    <div class="quiz-question">Quiz Tamamlandı!</div>
+                    <div class="card">
+                        <div class="card-content">
+                            <h3>Toplam Skorunuz: ${userScore}/${quizQuestions.length}</h3>
+                            <p>Türk tarihi hakkındaki bilgilerinizi test ettiniz. İşte sonuçlarınız.</p>
+                            <div class="sticky-note">
+                                ${userScore >= 8 ? 'Harika! Türk tarihi konusunda mükemmel bilgiye sahipsiniz.' : 
+                                   userScore >= 5 ? 'İyi iş! Türk tarihi hakkında iyi bir bilginiz var.' :
+                                   'Daha fazla çalışmaya devam edin. Türk tarihi hakkında daha fazla bilgi edinebilirsiniz.'}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="btn" id="restart-quiz">Yeniden Başla</button>
+                    </div>
+                `;
+                
+                document.getElementById('restart-quiz').addEventListener('click', function() {
+                    initQuiz();
+                });
+            }
+            
+            function updateQuizScore() {
+                document.getElementById('quiz-score').textContent = userScore;
+                document.getElementById('quiz-total').textContent = quizQuestions.length;
+            }
+            
+            function updateQuizProgressBar() {
+                const progressBar = document.getElementById('quiz-progress-bar');
+                const progressPercentage = ((currentQuizIndex) / quizQuestions.length) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+            }
+            
+            // Sayfa yüklendiğinde gerekli başlatmaları yap
+            initFlashcards();
+            initQuiz();
+        });
+    </script>
+</body>
+</html>
